@@ -1,0 +1,19 @@
+# Environment
+node_modules/
+dist/
+.env
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+*.tsbuildinfo
+
+# Docker
+postgres_data/

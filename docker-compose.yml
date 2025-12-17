@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: lecture_attendance_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-postgres}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+      POSTGRES_DB: ${DATABASE_NAME:-lecture_attendance}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - lecture_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lecture_attendance_api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${DATABASE_NAME:-lecture_attendance}
+      DATABASE_USER: ${DATABASE_USER:-postgres}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_change_me}
+      AOSP_SECRET_KEY: ${AOSP_SECRET_KEY:-your_aosp_secret_key}
+      DEVICE_SYNC_INTERVAL_SECONDS: ${DEVICE_SYNC_INTERVAL_SECONDS:-30}
+      ATTENDANCE_GRACE_PERIOD_MINUTES: ${ATTENDANCE_GRACE_PERIOD_MINUTES:-15}
+      LATE_THRESHOLD_MINUTES: ${LATE_THRESHOLD_MINUTES:-10}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - lecture_network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: lecture_attendance_ui
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - lecture_network
+
+networks:
+  lecture_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,20 @@
+{
+    "name": "lecture-attendance-system",
+    "version": "1.0.0",
+    "description": "Lecture Attendance and Registration System with FingerTec Face ID 2 biometric integration",
+    "private": true,
+    "scripts": {
+        "dev": "node dev.js",
+        "dev:backend": "cd backend && npm run dev",
+        "dev:frontend": "cd frontend && npm run dev",
+        "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+        "build": "cd backend && npm run build && cd ../frontend && npm run build",
+        "start": "cd backend && npm start",
+        "docker:up": "docker-compose up -d",
+        "docker:down": "docker-compose down",
+        "docker:build": "docker-compose build"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}
