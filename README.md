@@ -1,6 +1,6 @@
-# Lecture Attendance & Registration System
+# Lecture Attendance System with Facial Recognition
 
-A complete, production-ready web-based system for managing lecture attendance with FingerTec Face ID 2 biometric terminal integration (face + fingerprint). Supports multiple device communication methods: TCP/IP, RS232/RS485, USB flash-disk import, and AOSP direct connection.
+A complete, production-ready web-based system for managing lecture attendance using **AI-powered facial recognition** with ML-based anti-spoofing. Students can check in using their webcam (browser or mobile), and the system verifies their identity using face matching with liveness detection.
 
 ## 🚀 Tech Stack
 
@@ -9,7 +9,8 @@ A complete, production-ready web-based system for managing lecture attendance wi
 | **Backend** | Node.js + Express + TypeScript |
 | **Database** | PostgreSQL 15 |
 | **Frontend** | React 18 + Vite + TypeScript |
-| **Device Integration** | TCP/IP, RS232/RS485, USB, AOSP REST API |
+| **Face Recognition** | Python + FastAPI + face_recognition + DeepFace |
+| **Anti-Spoofing** | DeepFace Silent-Face (ML-based liveness detection) |
 | **Export/Import** | ExcelJS / SheetJS (xlsx) |
 | **Containerization** | Docker + docker-compose |
 
@@ -17,49 +18,54 @@ A complete, production-ready web-based system for managing lecture attendance wi
 
 ### Admin Dashboard
 - 📊 Real-time statistics and today's schedule
-- 👨‍🎓 **Student Management**: Add, edit, delete students with biometric IDs
+- 👨‍🎓 **Student Management**: Add, edit, delete students
+- 👤 **Face Registration**: Register student faces via webcam
 - 📅 **Lecture Scheduling**: Manual entry or Excel import
 - ✅ **Attendance Tracking**: View, filter, export to Excel
-- 🖥️ **Device Management**: Configure TCP/IP, RS485, USB, AOSP connections
 
-### Device Integration
-- **TCP/IP Mode**: Direct connection via static IP using ZK protocol
-- **RS232/RS485 Mode**: Serial communication with configurable port/baud rate  
-- **USB Flash-Disk Import**: Upload .dat, .txt, .csv files
-- **AOSP Direct Connection**: REST API for Android service integration
+### Facial Recognition Check-In
+- **Webcam Support**: Works on desktop browsers and mobile devices
+- **ML Anti-Spoofing**: Detects and rejects printed photos, screen displays, and video replays
+- **Real-time Verification**: Instant face matching with confidence scoring
+- **User-Friendly**: Simple check-in flow with visual feedback
+- **Secure**: Face encodings stored as encrypted 128-dimensional vectors
 
 ### Attendance Logic
-- Automatic matching of biometric scans to lectures
+- Automatic face-based attendance marking
 - Status determination: Present / Late / Absent
 - Configurable grace period and late threshold
-- Duplicate scan handling (only first scan counts)
+- Prevents duplicate check-ins
+
 
 ## 🛠️ Quick Start
 
 ### Prerequisites
 - Node.js 18+
+- Python 3.11+ (for face recognition service)
 - PostgreSQL 15+
-- Docker & Docker Compose (optional)
+- Docker & Docker Compose (recommended)
 
 ### Option 1: Docker Compose (Recommended)
 
 ```bash
 # Clone and navigate to project directory
-cd A&AProj
+cd LectureAttendance
 
 # Create environment file
-cp backend/.env.example .env
+cp backend/.env.example backend/.env
 
-# Edit .env with your settings
-# Especially: DATABASE_PASSWORD, JWT_SECRET, AOSP_SECRET_KEY
+# Edit backend/.env with your settings
+# Required: DATABASE_PASSWORD, JWT_SECRET
+# Optional: FACE_MATCH_THRESHOLD, ANTI_SPOOF_THRESHOLD
 
-# Start all services
+# Start all services (backend, frontend, face-service, database)
 docker-compose up -d
 
 # Access the application
 # Frontend: http://localhost:5173
 # Backend API: http://localhost:3000
-# Health check: http://localhost:3000/health
+# Face Service: http://localhost:5000
+# Student Check-in: http://localhost:5173/check-in
 ```
 
 ### Option 2: Manual Setup

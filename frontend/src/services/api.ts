@@ -53,6 +53,8 @@ export interface Student {
     status: 'active' | 'inactive' | 'suspended';
     registration_timestamp?: string;
     enrollment_date?: string;
+    face_encoding?: string;
+    face_image_url?: string;
     created_at: string;
     updated_at: string;
 }
@@ -370,6 +372,45 @@ export const attendanceApi = {
 
     markAbsent: async (subjectId: string, date: string) => {
         const response = await api.post('/admin/attendance/mark-absent', { subject_id: subjectId, date });
+        return response.data;
+    },
+};
+
+// Face Recognition API
+export const faceApi = {
+    register: async (studentId: string, imageData: string) => {
+        const response = await api.post(`/face/register/${studentId}`, { image: imageData });
+        return response.data;
+    },
+
+    verify: async (studentId: string, imageData: string) => {
+        const response = await api.post(`/face/verify/${studentId}`, { image: imageData });
+        return response.data;
+    },
+
+    checkIn: async (studentId: string, imageData: string) => {
+        const response = await api.post('/face/check-in', {
+            student_id: studentId,
+            image: imageData,
+        });
+        return response.data;
+    },
+
+    checkInByBiometricId: async (biometricUserId: string, imageData: string) => {
+        const response = await api.post('/face/check-in', {
+            biometric_user_id: biometricUserId,
+            image: imageData,
+        });
+        return response.data;
+    },
+
+    getStatus: async (studentId: string) => {
+        const response = await api.get(`/face/status/${studentId}`);
+        return response.data;
+    },
+
+    deleteEncoding: async (studentId: string) => {
+        const response = await api.delete(`/face/encoding/${studentId}`);
         return response.data;
     },
 };

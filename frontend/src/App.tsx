@@ -7,6 +7,8 @@ import Subjects from './pages/Subjects';
 import Attendance from './pages/Attendance';
 import Devices from './pages/Devices';
 import Login from './pages/Login';
+import FaceRegistration from './pages/FaceRegistration';
+import FaceCheckIn from './pages/FaceCheckIn';
 
 // Protected Route wrapper
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -24,6 +26,7 @@ function App() {
         <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
+            <Route path="/check-in" element={<FaceCheckIn />} />
 
             {/* Protected routes */}
             <Route path="/" element={
@@ -38,6 +41,7 @@ function App() {
                 <Route path="lectures" element={<Lectures />} />
                 <Route path="attendance" element={<Attendance />} />
                 <Route path="devices" element={<Devices />} />
+                <Route path="face-registration" element={<FaceRegistration />} />
             </Route>
 
             {/* Catch all - redirect to login */}

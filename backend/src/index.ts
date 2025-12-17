@@ -16,6 +16,7 @@ import attendanceRoutes from './routes/attendance.routes';
 import aospRoutes from './routes/aosp.routes';
 import publicRoutes from './routes/public.routes';
 import authRoutes from './routes/auth.routes';
+import faceRoutes from './routes/face.routes';
 
 // Services
 import { adminService } from './services/admin.service';
@@ -52,6 +53,9 @@ app.use('/api/v1/admin/attendance', attendanceRoutes);
 // Device API Routes
 app.use('/api/v1/aosp', aospRoutes);
 app.use('/api/v1', publicRoutes);
+
+// Face Recognition Routes
+app.use('/api/v1/face', faceRoutes);
 
 // Error handling
 app.use(errorHandler);

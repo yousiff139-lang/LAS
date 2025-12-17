@@ -61,6 +61,12 @@ export class Student {
     @Column({ type: 'timestamp', nullable: true })
     enrollment_date?: Date;
 
+    @Column({ type: 'text', nullable: true })
+    face_encoding?: string; // JSON array of 128 floats for face recognition
+
+    @Column({ type: 'text', nullable: true })
+    face_image_url?: string; // Reference photo for admin verification
+
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     registration_timestamp!: Date;
 

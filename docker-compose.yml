@@ -44,9 +44,34 @@ services:
       DEVICE_SYNC_INTERVAL_SECONDS: ${DEVICE_SYNC_INTERVAL_SECONDS:-30}
       ATTENDANCE_GRACE_PERIOD_MINUTES: ${ATTENDANCE_GRACE_PERIOD_MINUTES:-15}
       LATE_THRESHOLD_MINUTES: ${LATE_THRESHOLD_MINUTES:-10}
+      FACE_SERVICE_URL: http://face-service:5000
+      FACE_MATCH_THRESHOLD: ${FACE_MATCH_THRESHOLD:-0.6}
+      ANTI_SPOOF_THRESHOLD: ${ANTI_SPOOF_THRESHOLD:-0.8}
     depends_on:
       postgres:
         condition: service_healthy
+      face-service:
+        condition: service_started
+    networks:
+      - lecture_network
+
+  # Face Recognition Service (Python)
+  face-service:
+    build:
+      context: ./face-service
+      dockerfile: Dockerfile
+    container_name: lecture_attendance_faceservice
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 5000
+      DEBUG: "false"
+      FACE_MATCH_THRESHOLD: ${FACE_MATCH_THRESHOLD:-0.6}
+      ANTI_SPOOF_THRESHOLD: ${ANTI_SPOOF_THRESHOLD:-0.8}
+      MIN_FACE_SIZE: 80
+      ALLOWED_ORIGINS: http://localhost:5173,http://frontend:80,http://localhost:3000
     networks:
       - lecture_network
 
