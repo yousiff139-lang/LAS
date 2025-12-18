@@ -5,7 +5,6 @@ import Students from './pages/Students';
 import Lectures from './pages/Lectures';
 import Subjects from './pages/Subjects';
 import Attendance from './pages/Attendance';
-import Devices from './pages/Devices';
 import Login from './pages/Login';
 import FaceRegistration from './pages/FaceRegistration';
 import FaceCheckIn from './pages/FaceCheckIn';
@@ -40,7 +39,6 @@ function App() {
                 <Route path="subjects" element={<Subjects />} />
                 <Route path="lectures" element={<Lectures />} />
                 <Route path="attendance" element={<Attendance />} />
-                <Route path="devices" element={<Devices />} />
                 <Route path="face-registration" element={<FaceRegistration />} />
             </Route>
 
@@ -51,4 +49,3 @@ function App() {
 }
 
 export default App;
-
